@@ -21,76 +21,37 @@ export default async function handler(req, res) {
         } catch (error) {
             res.status(500).json({ error: 'Error al cargar medicamentos' });
         }
+    } else if (req.method === 'POST') {
+        // Crear un nuevo medicamento
+        const medicamento = new Medicamento(req.body);
+        try {
+            await medicamento.save();
+            res.status(201).json(medicamento);
+        } catch (error) {
+            res.status(400).json({ error: 'Error al crear medicamento' });
+        }
+    } else if (req.method === 'PUT') {
+        // Actualizar un medicamento
+        try {
+            const medicamento = await Medicamento.findByIdAndUpdate(req.body.id, req.body, { new: true });
+            if (!medicamento) {
+                res.status(404).json({ message: 'Medicamento no encontrado' });
+            } else {
+                res.status(200).json(medicamento);
+            }
+        } catch (error) {
+            res.status(400).json({ error: 'Error al actualizar medicamento' });
+        }
+    } else if (req.method === 'DELETE') {
+        // Eliminar un medicamento
+        try {
+            await Medicamento.findByIdAndRemove(req.body.id);
+            res.status(200).json({ message: 'Medicamento eliminado' });
+        } catch (error) {
+            res.status(500).json({ error: 'Error al eliminar medicamento' });
+        }
     } else {
-        res.setHeader('Allow', ['GET']);
+        res.setHeader('Allow', ['GET', 'POST', 'PUT', 'DELETE']);
         res.status(405).end(`Method ${req.method} Not Allowed`);
     }
 }
-
-
-
-// routes/medicamentos.js
-const express = require('express');
-const router = express.Router();
-const Medicamento = require('../models/Medicamento');
-
-// Crear un nuevo medicamento
-router.post('/', async (req, res) => {
-  const medicamento = new Medicamento(req.body);
-  try {
-    await medicamento.save();
-    res.status(201).send(medicamento);
-  } catch (err) {
-    res.status(400).send(err);
-  }
-});
-
-// Leer todos los medicamentos
-router.get('/', async (req, res) => {
-  try {
-    const medicamentos = await Medicamento.find();
-    res.send(medicamentos);
-  } catch (err) {
-    res.status(500).send(err);
-  }
-});
-
-// Leer un medicamento por ID
-router.get('/:id', async (req, res) => {
-  try {
-    const medicamento = await Medicamento.findById(req.params.id);
-    if (!medicamento) {
-      res.status(404).send({ message: 'Medicamento no encontrado' });
-    } else {
-      res.send(medicamento);
-    }
-  } catch (err) {
-    res.status(500).send(err);
-  }
-});
-
-// Actualizar un medicamento
-router.put('/:id', async (req, res) => {
-  try {
-    const medicamento = await Medicamento.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    if (!medicamento) {
-      res.status(404).send({ message: 'Medicamento no encontrado' });
-    } else {
-      res.send(medicamento);
-    }
-  } catch (err) {
-    res.status(400).send(err);
-  }
-});
-
-// Eliminar un medicamento
-router.delete('/:id', async (req, res) => {
-  try {
-    await Medicamento.findByIdAndRemove(req.params.id);
-    res.send({ message: 'Medicamento eliminado' });
-  } catch (err) {
-    res.status(500).send(err);
-  }
-});
-
-module.exports = router;

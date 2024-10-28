@@ -1,316 +1,124 @@
 <!DOCTYPE html>
 <html lang="es">
-    <script>
-        const medicamentosGrid = document.getElementById('medicamentos-grid');
-    
-        // Función para cargar medicamentos desde la base de datos
-        async function cargarMedicamentos() {
-            try {
-                const response = await fetch('/api/medicamentos'); // Cambia la URL a la ruta de la API en Vercel
-                const listaMedicamentos = await response.json();
-    
-                listaMedicamentos.forEach(medicamento => {
-                    const div = document.createElement('div');
-                    div.classList.add('medicamento');
-                    if (!medicamento.disponible) {
-                        div.classList.add('agotado');
-                    }
-    
-                    const img = document.createElement('img');
-                    img.src = medicamento.imagen; // Ruta de imagen específica
-                    img.alt = medicamento.nombre;
-    
-                    const pNombre = document.createElement('p');
-                    pNombre.textContent = medicamento.nombre;
-    
-                    const pInfo = document.createElement('p');
-                    pInfo.textContent = medicamento.info;
-                    pInfo.classList.add('info'); // Agregar clase para el estilo
-    
-                    div.appendChild(img);
-                    div.appendChild(pNombre);
-                    div.appendChild(pInfo);
-                    medicamentosGrid.appendChild(div);
-                });
-            } catch (error) {
-                console.error('Error al cargar medicamentos:', error);
-            }
-        }
-    
-        // Cargar medicamentos al inicio
-        cargarMedicamentos();
-    </script>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Consulta de Medicamentos</title>
-    <style>
-        /* Estilos generales */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-            color: #333;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-        }
-
-        h1 {
-            text-align: center;
-            color: #007BFF;
-        }
-
-        /* Estilos para el formulario */
-        form {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-            position: relative;
-        }
-
-        input[type="text"] {
-            flex: 1;
-            padding: 10px;
-            font-size: 16px;
-            border: 2px solid #ccc;
-            border-radius: 20px;
-            outline: none;
-            transition: border-color 0.3s ease;
-            width: 250px;
-        }
-
-        input[type="text"]:focus {
-            border-color: #007BFF;
-        }
-
-        button {
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            margin-left: 10px;
-            border-radius: 20px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-
-        /* Estilo para las sugerencias */
-        .sugerencias {
-            border: 1px solid #ccc;
-            background-color: #fff;
-            max-height: 150px;
-            overflow-y: auto;
-            width: 100%;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            margin-top: 5px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-        }
-
-        .sugerencia-item {
-            padding: 10px;
-            cursor: pointer;
-        }
-
-        .sugerencia-item:hover {
-            background-color: #f0f0f0;
-        }
-
-        .medicamentos-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        .medicamento {
-            text-align: center;
-            position: relative; /* Para posicionar la imagen */
-        }
-
-        .medicamento img {
-            max-width: 100%;
-            height: 100px; /* Altura fija para las imágenes */
-            border-radius: 10px;
-            margin-bottom: 10px; /* Espacio entre la imagen y el nombre del medicamento */
-        }
-
-        .agotado {
-            opacity: 0.5; /* Disminuye la opacidad para indicar que está agotado */
-        }
-
-        .info {
-            font-size: 14px;
-            color: #666;
-        }
-    </style>
+    <title>CRUD Medicamentos</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <div class="container">
-        <h1>Consulta de Medicamentos</h1>
-        
-        <!-- Formulario de búsqueda -->
-        <form onsubmit="buscarMedicamento(); return false;">
-            <input type="text" id="buscar" placeholder="Buscar medicamento..." oninput="mostrarSugerencias()">
-            <button type="submit">Buscar</button>
-            <div id="sugerencias" class="sugerencias"></div>
-        </form>
+    <h1>CRUD Medicamentos</h1>
+    
+    <h2>Crear Medicamento</h2>
+    <form id="createForm">
+        <input type="text" id="nombre" placeholder="Nombre" required>
+        <input type="number" id="valor" placeholder="Valor" required>
+        <input type="text" id="stock" placeholder="Stock" required>
+        <input type="text" id="imagen" placeholder="Imagen URL" required>
+        <button type="submit">Crear Medicamento</button>
+    </form>
 
-        <!-- Medicamentos disponibles -->
-        <h2>Medicamentos Disponibles</h2>
-        <div class="medicamentos-grid" id="medicamentos-grid"></div>
-    </div>
+    <h2>Medicamentos</h2>
+    <div id="medicamentosList"></div>
 
-    <!-- Script para búsqueda y sugerencias -->
     <script>
-    // Lista de medicamentos con disponibilidad y descripción
-    const listaMedicamentos = [
-        { nombre: 'Paracetamol', disponible: true, imagen: 'paracetamol.jpg', info: 'Utilizado para aliviar el dolor y reducir fiebre.' },
-        { nombre: 'Ibuprofeno', disponible: true, imagen: 'ibuprofeno.webp', info: 'Anti-inflamatorio no esteroideo para dolor y fiebre.' },
-        { nombre: 'Amoxicilina', disponible: true, imagen: 'amoxicilina.webp', info: 'Antibiótico utilizado para tratar infecciones bacterianas.' },
-        { nombre: 'Metformina', disponible: false, imagen: 'metformina.webp', info: 'Medicamento para controlar la glucosa en sangre.' },
-        { nombre: 'Omeprazol', disponible: true, imagen: 'omeprazol.png', info: 'Inhibidor de la bomba de protones para acidez.' },
-        { nombre: 'Aspirina', disponible: true, imagen: 'aspirina-ultra-producto_2.png', info: 'Antiinflamatorio y anticoagulante, usado en cardiopatías.' },
-        { nombre: 'Diclofenaco', disponible: false, imagen: 'Diclofenaco.webp', info: 'Antiinflamatorio no esteroideo para tratar el dolor.' },
-        { nombre: 'Loratadina', disponible: true, imagen: 'loratadina.jpg', info: 'Antihistamínico para alergias.' },
-        { nombre: 'Clonazepam', disponible: true, imagen: 'clonazepam.jpg', info: 'Medicamento ansiolítico y anticonvulsivante.' },
-        { nombre: 'Sertralina', disponible: false, imagen: 'setralina.webp', info: 'Antidepresivo utilizado para tratar trastornos de ansiedad.' },
-        { nombre: 'Simvastatina', disponible: true, imagen: 'simvastatina.jpg', info: 'Medicamento para reducir el colesterol.' },
-        { nombre: 'Salbutamol', disponible: true, imagen: 'salbutamol.jpg', info: 'Broncodilatador utilizado en asma.' },
-        { nombre: 'Cefalexina', disponible: false, imagen: 'cefalexina.webp', info: 'Antibiótico para infecciones bacterianas.' },
-        { nombre: 'Ranitidina', disponible: true, imagen: 'ranitidina.jpeg', info: 'Medicamento para reducir la producción de ácido en el estómago.' },
-        { nombre: 'Amlodipino', disponible: true, imagen: 'amlodipino.webp', info: 'Antihipertensivo usado para tratar la presión alta.' },
-        { nombre: 'Fluoxetina', disponible: false, imagen: 'fluoxetina.jpg', info: 'Antidepresivo que se utiliza para tratar trastornos del estado de ánimo.' },
-        { nombre: 'Enalapril', disponible: true, imagen: 'enalapril.jpg', info: 'Medicamento para tratar la hipertensión.' },
-        { nombre: 'Ketorolaco', disponible: true, imagen: 'ketorolaco.webp', info: 'Analgesico para el tratamiento del dolor agudo.' },
-        { nombre: 'Betametasona', disponible: false, imagen: 'betametasona.webp', info: 'Corticosteroide utilizado para tratar inflamaciones.' },
-        { nombre: 'Dipirona', disponible: true, imagen: 'dipirona.webp', info: 'Analgesico y antipirético para el tratamiento del dolor.' },
-        { nombre: 'Levotiroxina', disponible: true, imagen: 'levotiroxina.webp', info: 'Hormona tiroidea para tratar el hipotiroidismo.' },
-        { nombre: 'Mupirocina', disponible: true, imagen: 'mupirocina.jpg', info: 'Antibiótico tópico para infecciones cutáneas.' },
-        { nombre: 'Hidroclorotiazida', disponible: true, imagen: 'hidroclorotiaziada.jpg', info: 'Diurético utilizado para tratar la hipertensión.' },
-        { nombre: 'Atorvastatina', disponible: false, imagen: 'atorvastatina.webp', info: 'Medicamento para reducir el colesterol.' },
-        { nombre: 'Captopril', disponible: true, imagen: 'captopril.webp', info: 'Medicamento antihipertensivo.' },
-        { nombre: 'Glicerol', disponible: true, imagen: 'glicerol.jpg', info: 'Uso como laxante y en el tratamiento de piel seca.' },
-        { nombre: 'Metoclopramida', disponible: true, imagen: 'metoclopramida.jpg', info: 'Medicamento para náuseas y vómitos.' },
-        { nombre: 'Lorazepam', disponible: false, imagen: 'lorazepam.jpg', info: 'Ansiolítico utilizado en trastornos de ansiedad.' },
-        { nombre: 'Tramadol', disponible: true, imagen: 'tramadol.jpg', info: 'Analgesico opioide para el tratamiento del dolor moderado a severo.' },
-        { nombre: 'Nimesulida', disponible: true, imagen: 'nimesulida.webp', info: 'Antiinflamatorio no esteroideo usado para tratar dolor e inflamación.' }
-    ];
-
-    // Función para mostrar medicamentos al cargar
-    function cargarMedicamentos() {
-        const grid = document.getElementById('medicamentos-grid');
-        listaMedicamentos.forEach(medicamento => {
-            const div = document.createElement('div');
-            div.classList.add('medicamento');
-            if (!medicamento.disponible) {
-                div.classList.add('agotado');
-            }
-
-            const img = document.createElement('img');
-            img.src = medicamento.imagen; // Ruta de imagen específica
-            img.alt = medicamento.nombre;
-
-            const pNombre = document.createElement('p');
-            pNombre.textContent = medicamento.nombre;
-
-            const pInfo = document.createElement('p');
-            pInfo.textContent = medicamento.info;
-            pInfo.classList.add('info'); // Agregar clase para el estilo
-
-            div.appendChild(img);
-            div.appendChild(pNombre);
-            div.appendChild(pInfo);
-            grid.appendChild(div);
-        });
-    }
-
-    function mostrarSugerencias() {
-        var input = document.getElementById("buscar").value.toLowerCase();
-        var sugerencias = document.getElementById("sugerencias");
-
-        // Limpiar sugerencias anteriores
-        sugerencias.innerHTML = '';
-
-        if (input.length === 0) {
-            return; // No mostrar sugerencias si el campo de búsqueda está vacío
+        // Función para cargar medicamentos
+        function loadMedicamentos() {
+            $.get('/api/medicamentos', function(medicamentos) {
+                $('#medicamentosList').empty();
+                medicamentos.forEach(medicamento => {
+                    $('#medicamentosList').append(`
+                        <div>
+                            <h3>${medicamento.nombre}</h3>
+                            <p>Valor: ${medicamento.valor}</p>
+                            <p>Stock: ${medicamento.stock}</p>
+                            <img src="${medicamento.imagen}" alt="${medicamento.nombre}" width="100">
+                            <button onclick="editMedicamento('${medicamento._id}')">Editar</button>
+                            <button onclick="deleteMedicamento('${medicamento._id}')">Eliminar</button>
+                        </div>
+                    `);
+                });
+            });
         }
 
-        // Filtrar y mostrar sugerencias
-        listaMedicamentos.forEach(function(medicamento) {
-            if (medicamento.nombre.toLowerCase().includes(input)) {
-                var item = document.createElement('div');
-                item.textContent = medicamento.nombre;
-                item.classList.add('sugerencia-item');
+        // Crear medicamento
+        $('#createForm').on('submit', function(e) {
+            e.preventDefault();
+            const nuevoMedicamento = {
+                nombre: $('#nombre').val(),
+                valor: $('#valor').val(),
+                stock: $('#stock').val(),
+                imagen: $('#imagen').val(),
+            };
 
-                // Al hacer clic en una sugerencia, se autocompleta el campo de búsqueda
-                item.onclick = function() {
-                    document.getElementById("buscar").value = medicamento.nombre;
-                    sugerencias.innerHTML = ''; // Limpiar sugerencias
-                    buscarMedicamento();
-                };
-
-                sugerencias.appendChild(item);
-            }
+            $.post('/api/medicamentos', nuevoMedicamento, function() {
+                loadMedicamentos();
+                $('#createForm')[0].reset(); // Limpiar el formulario
+            });
         });
-    }
 
-    function buscarMedicamento() {
-        var input = document.getElementById("buscar").value.toLowerCase();
-        var grid = document.getElementById('medicamentos-grid');
+        // Editar medicamento
+        function editMedicamento(id) {
+            $.get(`/api/medicamentos/${id}`, function(medicamento) {
+                $('#nombre').val(medicamento.nombre);
+                $('#valor').val(medicamento.valor);
+                $('#stock').val(medicamento.stock);
+                $('#imagen').val(medicamento.imagen);
+                
+                // Cambiar el evento del formulario para actualizar en vez de crear
+                $('#createForm').off('submit').on('submit', function(e) {
+                    e.preventDefault();
+                    const updatedMedicamento = {
+                        id: id, // Agregar el ID del medicamento
+                        nombre: $('#nombre').val(),
+                        valor: $('#valor').val(),
+                        stock: $('#stock').val(),
+                        imagen: $('#imagen').val(),
+                    };
 
-        // Limpiar el grid
-        grid.innerHTML = '';
+                    $.ajax({
+                        url: `/api/medicamentos`,
+                        type: 'PUT',
+                        data: updatedMedicamento,
+                        success: function() {
+                            loadMedicamentos();
+                            $('#createForm')[0].reset(); // Limpiar el formulario
+                            // Restaurar el evento original
+                            $('#createForm').off('submit').on('submit', function(e) {
+                                e.preventDefault();
+                                const nuevoMedicamento = {
+                                    nombre: $('#nombre').val(),
+                                    valor: $('#valor').val(),
+                                    stock: $('#stock').val(),
+                                    imagen: $('#imagen').val(),
+                                };
+                                $.post('/api/medicamentos', nuevoMedicamento, function() {
+                                    loadMedicamentos();
+                                    $('#createForm')[0].reset();
+                                });
+                            });
+                        }
+                    });
+                });
+            });
+        }
 
-        // Filtrar y mostrar medicamentos según la búsqueda
-        listaMedicamentos.forEach(function(medicamento) {
-            if (medicamento.nombre.toLowerCase().includes(input)) {
-                const div = document.createElement('div');
-                div.classList.add('medicamento');
-                if (!medicamento.disponible) {
-                    div.classList.add('agotado');
+        // Eliminar medicamento
+        function deleteMedicamento(id) {
+            $.ajax({
+                url: `/api/medicamentos`,
+                type: 'DELETE',
+                data: { id: id },
+                success: function() {
+                    loadMedicamentos();
                 }
+            });
+        }
 
-                const img = document.createElement('img');
-                img.src = medicamento.imagen; // Ruta de imagen específica
-                img.alt = medicamento.nombre;
-
-                const pNombre = document.createElement('p');
-                pNombre.textContent = medicamento.nombre;
-
-                const pInfo = document.createElement('p');
-                pInfo.textContent = medicamento.info;
-                pInfo.classList.add('info'); // Agregar clase para el estilo
-
-                div.appendChild(img);
-                div.appendChild(pNombre);
-                div.appendChild(pInfo);
-                grid.appendChild(div);
-            }
+        // Cargar medicamentos al inicio
+        $(document).ready(function() {
+            loadMedicamentos();
         });
-    }
-
-    // Cargar medicamentos al inicio
-    cargarMedicamentos();
     </script>
 </body>
 </html>
-
-
