@@ -1,0 +1,173 @@
+:root {
+    /* Se crean variables con los colores para que sea más sencillo de utilizar */
+    --color-acento: #C39BD3;
+    --color-acento-claro: #8E44AD;
+    --color-texto: black;
+}
+
+body {
+    font-family: Arial, sans-serif; /* Asegúrate de definir una fuente adecuada */
+    margin: 0; /* Quita el margen arriba */
+    display: flex;
+    flex-direction: column; /* Elementos uno abajo del otro */
+    height: 100vh; /* Altura del 100% del valor vertical */
+}
+
+h3{
+    margin: 6px 0;
+    color: rgb(42, 122, 213);
+    font-size: 25px;
+}
+
+p{
+    margin: 6px 0;
+}
+
+button{
+    background-color: rgb(213, 111, 42);
+    color: white;
+    font-weight: bold;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+a {
+    text-decoration: none; /* Quita la línea debajo de los links */
+    color: var(--color-texto); /* Links de color negro */
+}
+
+a:hover:not(#carrito:hover) { /* Cambios para todos los links menos para el carrito */
+    color: var(--color-acento);
+}
+
+header {
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1); /* Agrega sombra al header con opacidad */
+    padding: 10px 0; /* Margen en la parte de arriba y abajo */
+    margin-bottom: 15px; /*Margen de la parte de arriba con las imágenes*/
+    background-color: rgb(188, 239, 154);
+}
+
+header nav {
+    display: flex; /* Hace que el logo y el carrito de compras estén al lado y no debajo */
+    justify-content: space-between; /* Hace que el logo esté en una esquina y el carrito en la otra */
+    margin: 0 60px; /* Margen a los lados del header */
+}
+
+header nav div {
+    display: flex; /* Hace que los enlaces estén alineados en una fila */
+    align-items: center; /* Centra verticalmente los elementos */
+    gap: 30px; /* Separa los links entre sí */
+    position: relative;
+}
+
+
+#cuentaCarrito {
+    background-color: red; /* Fondo rojo para el número de los elementos del carrito */
+    border-radius: 50%; /* Redondea el número del carrito */
+    display: inline-block; /* Permite ajustar el tamaño y centrar el número */
+    width: 20px; /* Ancho del círculo */
+    line-height: 20px; /* Centra el número verticalmente */
+    aspect-ratio: 1; /* Mantiene el aspecto redondo */
+    text-align: center; /* Centra el número horizontalmente */
+    position: absolute; /* Posiciona el número en relación al contenedor */
+    top: 10px; /* Ajusta la posición vertical */
+    right: -5px; /* Ajusta la posición horizontal */
+    color: white; /* Color del número */
+    font-size: 12px; /* Tamaño del número */
+}
+
+#logo {
+    height: 70px; /* Altura del logo */
+    border-radius: 100%;
+}
+
+header nav img {
+    height: 20px; /* Altura del carrito */
+}
+
+footer {
+    margin-top: auto; /* Empuja el footer hacia abajo */
+    box-shadow: 0 -3px 5px rgba(0, 0, 0, 0.1); /* Sombra al footer hacia arriba con opacidad */
+    text-align: center; /* Alinea el texto al centro */
+}
+
+.escondido{
+    display:none;
+}
+
+
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    font-size: 3rem;
+    margin-top: 20px;
+    color: #3a376a;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+}
+
+.menu-button {
+    background-color: #5a5ae4;
+    color: white;
+    padding: 20px 40px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.5rem;
+    margin: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.menu-button:hover {
+    background-color: #282875;
+}
+
+.menu-section {
+    margin-top: 40px;
+}
+
+#productos-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 40px;
+}
+
+.producto {
+    background-color: white;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    margin: 20px;
+    width: 200px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.producto img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+.producto h3 {
+    font-size: 1.2rem;
+    color: #333;
+}
+#frase{
+    font-size: 1.2em;
+    color: #555;
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}

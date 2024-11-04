@@ -1,6 +1,6 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
+    font-family: 'Arial', sans-serif;
+    background-color: #e9ecef; /* Color de fondo más suave */
     margin: 0;
     padding: 0;
 }
@@ -10,78 +10,97 @@ body {
     margin: 50px auto;
     text-align: center;
     background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    border-radius: 15px; /* Bordes más redondeados */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
     color: #333;
     margin-bottom: 20px;
+    font-size: 2.5em; /* Tamaño de fuente más grande */
 }
 
 button {
-    padding: 10px 20px;
+    padding: 12px 25px;
     background-color: #4CAF50;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     margin: 10px; /* Espaciado entre botones */
-    font-size: 16px; /* Tamaño de fuente */
-    transition: background-color 0.3s; /* Transición suave */
+    font-size: 18px; /* Tamaño de fuente */
+    transition: background-color 0.3s, transform 0.2s; /* Transición suave */
 }
 
 button:hover {
     background-color: #45a049;
+    transform: translateY(-2px); /* Efecto de elevación al pasar el mouse */
 }
 
 form {
     background-color: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     margin-top: 20px;
 }
 
 label {
     display: block;
-    margin: 10px 0 5px;
+    margin: 15px 0 5px;
     font-weight: bold;
+    color: #555; /* Color de texto más suave */
 }
 
 .inputContacto {
     width: calc(100% - 20px);
-    padding: 10px;
+    padding: 12px;
     border: 1px solid #ccc;
     border-radius: 5px;
     margin-bottom: 15px;
     font-size: 16px;
+    transition: border-color 0.3s; /* Transición para el borde */
+}
+
+.inputContacto:focus {
+    border-color: #4CAF50; /* Cambia el color del borde al enfocar */
+    outline: none; /* Elimina el contorno predeterminado */
 }
 
 textarea {
     resize: vertical; /* Permitir solo redimensionar verticalmente */
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    transition: border-color 0.3s; /* Transición para el borde */
+}
+
+textarea:focus {
+    border-color: #4CAF50; /* Cambia el color del borde al enfocar */
+    outline: none; /* Elimina el contorno predeterminado */
 }
 
 .enviar {
-    padding: 10px 20px;
-    background-color: #4CAF50;
+    padding: 12px 25px;
+    background-color: #007bff; /* Color de fondo diferente para el botón de envío */
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s;
+    font-size: 18px;
+    transition: background-color 0.3s, transform 0.2s; /* Transición suave */
 }
 
 .enviar:hover {
-    background-color: #45a049;
+    background-color: #0056b3; /* Color más oscuro al pasar el mouse */
+    transform: translateY(-2px); /* Efecto de elevación al pasar el mouse */
 }
 
 /* Estilos para dispositivos móviles */
 @media (max-width: 600px) {
     .container {
-        padding: 15px;
+        padding: 20px;
     }
 
     button, .enviar {
@@ -90,6 +109,6 @@ textarea {
     }
 
     .inputContacto {
-        font-size: 14px;
+        font-size: 16px;
     }
 }

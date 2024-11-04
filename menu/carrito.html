@@ -1,0 +1,52 @@
+<!DOCTYPE HTML>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="carrito.css">
+    <script src="./js/medicamentos.js"></script>
+    <script src="./js/carrito.js" defer></script>
+    <script src="./js/cartService.js" defer></script>
+    <title>PizzaArt</title>
+</head>
+
+<body>
+    <header>
+        <nav>
+
+
+          <a href="./index.html">
+                <img src="./img/logo.jpg" id="logo" alt="Logo">
+            </a>
+            <div>
+                
+                <a href="#">Ruta</a>
+                <a href="carrito.html" id="carrito"><img src="./img/iconoCarrito.jpg" alt="Carrito de compras">
+                    <span id="cuentaCarrito">0</span></a>
+            </div>
+        </nav>
+    </header>
+
+   
+
+    <main>
+        <p id="carrito-vacio">Ups!!, No hay productos en el carrito <a href="./index.html">Agrega algunos</a></p>
+        <section id="productos-container"></section>
+        <section id="totales">
+            <p>Total Unidades: <span id="unidades">0</span></p>
+            <p>Total a Pagar: $<span id="precio">0</span></p>
+            <button id="solicitar" disabled>Solicitar</button>
+            <button id="reiniciar">Reiniciar Carrito</button>
+          
+    </main>
+
+    <footer>
+
+       
+
+
+</body>
+</html>

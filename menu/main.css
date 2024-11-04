@@ -1,0 +1,38 @@
+#productos-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Tres columnas de igual tamaño */
+    gap: 20px; /* Espacio entre las tarjetas */
+    max-width: 1000px;
+    margin: auto;
+    justify-content: center;
+    padding: 20px;
+    background-color: #fafafa; /* Fondo suave para el contenedor */
+    border-radius: 12px;
+}
+
+.tarjeta-producto {
+    background-color: #e0ecf6; /* Fondo claro */
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+    transition: transform 300ms ease, box-shadow 300ms ease;
+    border-radius: 12px; /* Bordes redondeados */
+    text-align: center;
+}
+
+.tarjeta-producto:hover {
+    transform: translateY(-10px); /* Movimiento suave al hacer hover */
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2); /* Sombra más marcada */
+}
+
+.tarjeta-producto img {
+    width: 100%;
+    aspect-ratio: 2;
+    object-fit: cover; /* Ajuste de la imagen */
+    border-radius: 8px; /* Bordes redondeados para la imagen */
+    transition: transform 300ms ease; /* Transición para la imagen */
+}
+
+.tarjeta-producto img:hover {
+    transform: scale(1.05); /* Escala la imagen al hacer hover */
+}
+
